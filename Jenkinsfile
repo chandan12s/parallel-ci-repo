@@ -23,13 +23,13 @@ pipeline {
 
                 stage('Unit Tests') {
                     steps {
-                        sh 'mvn test jacoco:report'
+                        sh 'mvn test org.jacoco:jacoco-maven-plugin:0.8.12:report'
                     }
                 }
 
                 stage('Integration Tests') {
                     steps {
-                        sh 'mvn verify jacoco:report'
+                        sh 'mvn verify org.jacoco:jacoco-maven-plugin:0.8.12:report'
                     }
                 }
 
@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Publish Reports & Archive') {
             steps {
-                sh 'mvn jacoco:report || true'
+                sh 'mvn org.jacoco:jacoco-maven-plugin:0.8.12:report || true'
 
                 junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
                 junit allowEmptyResults: true, testResults: 'target/failsafe-reports/*.xml'
