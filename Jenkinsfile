@@ -5,7 +5,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/chandan12s/parallel-ci-repo.git'
+                git branch: 'main', url: 'https://github.com/chandan12s/parallel-ci-repo.git'
             }
         }
 
