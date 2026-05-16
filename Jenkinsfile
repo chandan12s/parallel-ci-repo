@@ -23,13 +23,13 @@ pipeline {
 
                 stage('Unit Tests') {
                     steps {
-                        sh 'mvn test'
+                        sh 'mvn test jacoco:report'
                     }
                 }
 
                 stage('Integration Tests') {
                     steps {
-                        sh 'mvn verify'
+                        sh 'mvn verify jacoco:report'
                     }
                 }
 
@@ -38,6 +38,16 @@ pipeline {
                         sh 'mvn pmd:pmd'
                     }
                 }
+            }
+        }
+        stage('Publish Reports & Archive') {
+            steps {
+                sh 'mvn jacoco:report || true'
+
+                junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+                junit allowEmptyResults: true, testResults: 'target/failsafe-reports/*.xml'
+
+                archiveArtifacts artifacts: 'target/*.jar, target/*.war, target/site/jacoco/**, target/surefire-reports/*.xml, target/failsafe-reports/*.xml', fingerprint: true
             }
         }
     }
